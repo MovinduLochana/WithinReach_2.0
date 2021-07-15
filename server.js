@@ -22,7 +22,7 @@ app.use("/api/user", userController);
 app.use("/api/seller", sellerController);
 
 const port = process.env.PORT || 9090;
-const host = "ec2-18-220-6-66.us-east-2.compute.amazonaws.com" ||
+const host = process.env.HOST || "ec2-18-220-6-66.us-east-2.compute.amazonaws.com";
 
 app.listen(port, host, () => {
     console.log(`Server listening on port:${port}`);
