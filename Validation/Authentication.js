@@ -37,7 +37,7 @@ async function AuthenticationUserSignUp(
   photoURL
 ) {
   //implement a method to check if user  already exsits before signUp
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const newUser = new userModel({
       name: name,
       email: email,
@@ -47,12 +47,12 @@ async function AuthenticationUserSignUp(
       photoURL: photoURL,
     });
 
-    userModel
+   userModel
       .validate(newUser)
       .then(() => {
         newUser
           .save()
-          .then((msg) => resolve(msg.map((e) => e.name) + "is saved"))
+          .then((msg) => resolve(msg))
           .catch((err) => reject(err));
       })
       .catch((err) => {
