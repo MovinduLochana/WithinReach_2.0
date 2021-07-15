@@ -74,15 +74,27 @@ sellerSchema.path("email").validate((val) => {
   return emailRegex.test(val);
 }, "Invalid e-mail.");
 
-// sellerSchema.path("name").validate((name) => {
-//     nameRegx = /^[a-zA-Z0-9]+$/;
-//     return nameRegx.test(name);
-// }, "Invalid userName");
+sellerSchema.path("name").validate((val) => {
+  username = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;;
+  return !username.test(val);
+}, "Invalid username");
 
-// sellerSchema.path("shopName").validate((shopName) => {
-//     nameRegx = /^[a-zA-Z0-9]+$/;
-//     return nameRegx.test(name);
-// }, "Invalid userName");
+sellerSchema.pre("save", async function(next) {
+  try {
+    const hashedPassword = await bcrypt.hash(this.password, 10);
+
+    if(!hashedPassword) return next("error");
+
+    this.password = hashedPassword;
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+sellerSchema.methods.comparePassword = async function(password) {
+  return await bcrypt.compare(password, this.password);
+}
 
 module.exports = mongoose.model("Seller", sellerSchema);
 
