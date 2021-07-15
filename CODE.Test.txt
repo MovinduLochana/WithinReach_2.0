@@ -1,0 +1,69 @@
+    // const nearShops = await getNearShops(
+    //   location_x,
+    //   location_y,
+    //   maxDist,
+    //   true
+    // ).catch((err) => reject(err));
+
+    // console.log(nearShops);
+
+    const aggre = {
+      near: [longitude, latitude],
+      distanceField: "Distance Catculated",
+      maxDistance: maxDist,
+      query: { searchTags: searchTags},
+      num: numOfResults,
+      spherical: true
+    }
+    const data = await sellerModel.aggregate([{
+      $geoNear: {
+      near: { type: "Point", coordinates: [parseFloat(longitude), parseFloat(latitude)]},
+      distanceField: "dist.calculated",
+      maxDistance: parseFloat(maxDist),
+      spherical: true
+    }
+    }]);
+
+    // const data2 = await sellerModel.find({
+    //   location: {
+    //     $geoWithin: {
+    //       $centerSphere: [
+    //         [longitude, latitude],
+    //         maxDist / (3963.2*1.60934),
+    //       ],
+    //     },
+    //   },
+    // })
+===============================================================================================================================================
+    const option = {
+      location: {
+        $geoWithin: {
+          $centerSphere: [[longitude, latitude], maxDist / 3963.2], //tales distance in radinas
+        },
+      },
+    };
+
+    const option_02 = {
+      location: {
+        $nearSphere: {
+          $geometry: {
+            type: "Point",
+            coordinates: [longitude, latitude],
+          },
+          $maxDistance: maxDist * 1609.34,
+        },
+      },
+    };
+
+    const op = {
+      location: {
+        $geoWithin: {
+          $centerSphere: [
+            [longitude, latitude],
+            maxDist / 3963.2, //miles
+          ],
+        },
+      },
+    };
+
+
