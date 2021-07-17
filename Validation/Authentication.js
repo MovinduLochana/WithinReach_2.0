@@ -47,17 +47,15 @@ async function AuthenticationUserSignUp(
       photoURL: photoURL,
     });
 
-   userModel
-      .validate(newUser)
-      .then(() => {
-        newUser
-          .save()
-          .then((msg) => resolve(msg))
-          .catch((err) => reject(err));
-      })
+   userModel.validate(newUser).then(async () => {
+        const doc = await newUser.save();
+
+        if(!doc) return reject("Sign in failed");
+        
+        resolve(doc);
+  })
       .catch((err) => {
         reject("error" + err);
-        console.log(err);
       });
   });
 }
@@ -88,11 +86,12 @@ function AuthenticationSellerSignUp(
 
     sellerModel
       .validate(newSeller)
-      .then(() => {
-        newSeller
-          .save()
-          .then((msg) => resolve(msg))
-          .catch((err) => reject(err));
+      .then(async () => {
+        const doc = await newSeller.save();
+
+        if(!doc) return reject("Sign in failed");
+
+        resolve(doc);
       })
       .catch((err) => {
         reject("error");

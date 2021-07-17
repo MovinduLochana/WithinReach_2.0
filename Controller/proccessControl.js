@@ -58,6 +58,7 @@ function getNearShopsMeth2(longitude, latitude, maxDist, inner) {
   });
 }
 
+
 function optimalSearch(
   userId,
   searchTags,
@@ -78,10 +79,18 @@ function optimalSearch(
 
     if (!data) return reject("error");
 
-    const re = data.map(e => e.stocks);
+    //const re = data.map(e => e.stocks);
+
+    searchTags = ["item", "biscults"];
+    let locations = []
+    searchTags.map((e) => {
+      if(e.stocks === ""){
+        locations.push(e.location)
+      }
+    })
 
     console.log(re.search);
-    resolve(re);
+    resolve(locations);
   });
 }
 
@@ -131,10 +140,10 @@ function addStocks(
 
         if(!msg) return reject("saving failed");
 
-        const doneMsg = await seller.stocks.push(newStock._id);
+        await seller.stocks.push(newStock._id);
 
         seller.save().then((sellerDoc) => {
-          resolve("Done Saving");
+          resolve(sellerDoc);
         }).catch(err => reject(err))
 
         //resolve(doneMsg);
