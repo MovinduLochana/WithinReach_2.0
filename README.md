@@ -8,6 +8,7 @@
 1. Basic Authentication
     1. hasing password
     2. compare hased passwords
+    3. AWS Integration
 2. Basic Authorization
 3. Basic function 
     1. find nearest shop
