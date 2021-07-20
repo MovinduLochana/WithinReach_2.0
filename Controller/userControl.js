@@ -165,6 +165,14 @@ router.post("/search", (req, res) => {
     res.send(err)
   }
 
-})
+});
+
+router.get("/imageURL", (req, res) => {
+  try {
+    
+  } catch (error) {
+    res.send(error);
+  }
+});
 
 module.exports = router;
