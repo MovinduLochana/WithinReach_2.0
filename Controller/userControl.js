@@ -11,9 +11,10 @@ const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 const { auth } = require("../Validation/Authorization");
-const { getNearShops, search, getNearShopsMeth2, optimalSearch } = require("../Controller/proccessControl");
+const { getNearShops, optimalSearch } = require("../Controller/proccessControl");
 const userModel = mongoose.model("User");
 const {AuthenticationUserSignUp,AuthenticationLogin} = require("../Validation/Authentication");
+const { generateUploadURL } = require("../AWS/Upload_S3");
 
 router.post("/signin", async (req, res) => {
 
@@ -169,7 +170,11 @@ router.post("/search", (req, res) => {
 
 router.get("/imageURL", (req, res) => {
   try {
-    
+
+    const url = await generateUploadURL();
+    res.send({ url });
+
+    const updateProfileImage = userModel.findById(req.user.id)
   } catch (error) {
     res.send(error);
   }

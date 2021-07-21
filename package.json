@@ -10,6 +10,7 @@
   "author": "movindu lochana",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.950.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
