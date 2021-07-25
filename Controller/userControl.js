@@ -13,7 +13,7 @@ const router = express.Router();
 const { auth } = require("../Validation/Authorization");
 const { getNearShops, optimalSearch } = require("../Controller/proccessControl");
 const userModel = mongoose.model("User");
-const {AuthenticationUserSignUp,AuthenticationLogin} = require("../Validation/Authentication");
+const { AuthenticationUserSignUp, AuthenticationLogin } = require("../Validation/Authentication");
 const { generateUploadURL } = require("../AWS/Upload_S3");
 
 router.post("/signin", async (req, res) => {
@@ -23,7 +23,7 @@ router.post("/signin", async (req, res) => {
   try {
     AuthenticationLogin(filter, identity, userPassword, userModel)
       .then((msg) => {
-       // console.log("here " + msg);
+        // console.log("here " + msg);
         res.json(msg);
       })
       .catch((err) => {
@@ -37,7 +37,7 @@ router.post("/signin", async (req, res) => {
 
 
 //add auth
-router.get("/list",async (req, res) => {
+router.get("/list", async (req, res) => {
 
   // console.log("search stared");
   try {
@@ -72,7 +72,7 @@ router.post("/signup", async (req, res) => {
     if (!(name && email && mobile && password && address && photoURL))
       return res.sendStatus(400);
 
-    AuthenticationUserSignUp(userModel, name, email, mobile, password,address,photoURL)
+    AuthenticationUserSignUp(userModel, name, email, mobile, password, address, photoURL)
       .then((msg) => {
         res.send(msg);
       })
@@ -93,13 +93,13 @@ router.patch("/list/:id", auth, async (req, res) => {
     // userData.sub = req.body.sub
 
     const msg = await userModel.findOneAndUpdate({
-        _id: req.params.id,
-      },
-      req.body,{
-        new: true,
-      }
+      _id: req.params.id,
+    },
+      req.body, {
+      new: true,
+    }
     );
-    
+
     //const a1 = await userData.save()
     res.json(msg);
 
@@ -116,7 +116,7 @@ router.delete("/list/:id", auth, async (req, res) => {
     const msg = await userModel.findByIdAndRemove(req.params.id);
     res.json(msg);
 
-  } 
+  }
   catch (error) {
 
     res.status(404).send("Id Not found");
@@ -141,34 +141,34 @@ router.get("/find", async (req, res) => {
         console.log(err);
       });
 
-  } 
+  }
   catch (error) {
     res.send(error);
   }
 });
 
 router.post("/search", (req, res) => {
-  try{
-    const {userId, searchTags } = req.body;
-    const {longitude, latitude, maxDist, numOfResults} = req.query;
+  try {
+    const { userId, searchTags } = req.body;
+    const { longitude, latitude, maxDist, numOfResults } = req.query;
 
-    if(!(userId && searchTags && longitude && latitude && maxDist  && numOfResults)) return res.send("bad Data");
+    if (!(userId && searchTags && longitude && latitude && maxDist && numOfResults)) return res.send("bad Data");
     optimalSearch(userId, searchTags, longitude, latitude, maxDist, numOfResults).then((data) => {
       res.json(data);
     })
-    .catch((err) => {
-      res.send(err);
-    });
+      .catch((err) => {
+        res.send(err);
+      });
 
-   // if(userId !== req.user.id) return res.send("you have no access");
+    // if(userId !== req.user.id) return res.send("you have no access");
   }
-  catch(err) {
+  catch (err) {
     res.send(err)
   }
 
 });
 
-router.get("/imageURL", (req, res) => {
+router.get("/imageURL", async (req, res) => {
   try {
 
     const url = await generateUploadURL();
